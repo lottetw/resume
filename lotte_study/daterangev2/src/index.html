@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-TW">
+<head>
+  <title>Date Range Picker 範例 v2</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Font Awesome v4.7.0 -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- date picker -->
+  <link rel="stylesheet" href="assets/css/normalize.css" />
+  <link rel="stylesheet" href="assets/css/daterangepicker.min.css" />
+  <!-- lotte style -->
+  <!-- <link rel="stylesheet" href="index.css" /> -->
+  <style>
+    body{
+      margin: 0; padding: 0;
+    }
+    *{
+      box-sizing: border-box;
+    }
+    /* 日曆相關樣式 */
+    /* 尺寸 */
+    .date-picker-wrapper{
+      width: 90%;
+      max-width: 300px;
+      box-sizing: border-box;
+      font-family: inherit;
+      -webkit-box-shadow: none;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      border-radius: .25rem;
+    }
+    .date-picker-wrapper .drp_top-bar{
+      padding: 10px;
+      border-top-left-radius: .25rem;
+      border-top-right-radius: .25rem;
+    }
+    .date-picker-wrapper .drp_top-bar.normal .normal-top, 
+    .date-picker-wrapper .drp_top-bar .default-top
+    {
+      width: 100%;
+    }
+    .date-picker-wrapper{
+      padding: 0;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    .date-picker-wrapper .drp_top-bar .apply-btn, .date-picker-wrapper .drp_top-bar .vic-clear-btn{
+      position: static;
+      display: inline-block;
+      margin-top: 6px;
+      width: calc(50% - 6px);
+      cursor: pointer;
+    }
+    .date-picker-wrapper .drp_top-bar .apply-btn{
+      margin-right: 6px
+    }
+    i.selected-days{
+      font-style: normal;
+    }
+    .date-picker-wrapper .month-wrapper{
+      border: 0;
+    }
+    .date-picker-wrapper .month-wrapper table{
+      width: 280px;
+      float: none;
+      margin: 0 auto;
+    }
+    .date-picker-wrapper .month-wrapper table td, .date-picker-wrapper .month-wrapper table th{
+      width: 40px;
+    }
+    .date-picker-wrapper .month-wrapper table .day{
+      font-size: 16px;
+      line-height: 40px;
+      padding: 0px;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+    .date-picker-wrapper table .caption,  .date-picker-wrapper table .week-name, .date-picker-wrapper table tr{
+      height: 40px;
+      line-height: 40px;
+    }
+    .date-picker-wrapper .month-wrapper table td, .date-picker-wrapper .month-wrapper table th{
+       height: 40px;
+      line-height: 40px;
+    }
+    /* colors */
+    .date-picker-wrapper .drp_top-bar{
+      background: WhiteSmoke;
+    }
+    .date-picker-wrapper .drp_top-bar .apply-btn, .vic-daterange-btn{
+      border: 0px;
+      color: white;
+      background: LightSeaGreen;
+    }
+    .date-picker-wrapper .drp_top-bar .vic-clear-btn{
+      color: white;
+      background: DarkGray;
+    }
+    .date-picker-wrapper .drp_top-bar .apply-btn.disabled, .date-picker-wrapper .drp_top-bar .vic-clear-btn.disabled{
+      border: 0px;
+      color: white;
+      background: DarkGray;
+    }
+    .date-picker-wrapper{
+      background: white;
+      color: black;
+    }
+    .date-picker-wrapper b{
+      color: DarkOrange;
+    }
+    .date-picker-wrapper .drp_top-bar.normal .normal-top .selection-top, i.selected-days{
+      color: black;
+    }
+    .date-picker-wrapper .month-wrapper table .day.real-today{
+      background: Gainsboro;
+    }
+    .date-picker-wrapper .first-date-selected, .date-picker-wrapper .last-date-selected{
+      background: DarkOrange!important; 
+      color: white!important;
+    }
+    .date-picker-wrapper .month-wrapper table .day.checked, .date-picker-wrapper .month-wrapper table .day.toMonth.hovering{
+      background: #ffddb4;
+    }
+     /* 圓角 */
+    .date-picker-wrapper .first-date-selected{
+      border-top-left-radius: 50%;
+      border-bottom-left-radius: 50%;
+    }
+    .date-picker-wrapper .month-wrapper table .day.real-today,
+    .date-picker-wrapper .first-date-selected.last-date-selected, 
+    .date-picker-wrapper .month-wrapper table .day.real-today.first-date-selected.last-date-selected{
+      border-radius: 50%;
+    }
+    .date-picker-wrapper .last-date-selected{
+      border-top-right-radius: 50%;
+      border-bottom-right-radius: 50%;
+    }
+    .date-picker-wrapper .month-wrapper table .day.real-today.first-date-selected{
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .date-picker-wrapper .month-wrapper table .day.real-today.last-date-selected{
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    /* 輪入框樣式 */
+    .vic-daterange-box{
+      padding: 10px;
+    }
+    .vic-daterange-p{
+      display: inline-block;
+    }
+    .vic-daterange, .vic-daterange-btn, .date-picker-wrapper .drp_top-bar .vic-daterange-btn{
+        padding: 6px 12px;
+        font-size: 16px;
+        border-radius: 4px;
+        font-weight: 400;
+        line-height: 1.5;
+    }
+    .vic-daterange, .vic-daterange-btn{
+       margin: 0 2px;
+    }
+    .vic-daterange{
+        min-width: 250px;
+        display: inline-block;
+        color: #000;
+        border: 1px solid darkgray;
+        background: url(assets/img/cart.png) no-repeat right 5px center white;
+        background-size: 16px 16px;
+        padding-right: 24px;
+    }
+    .date-picker-wrapper.single-month .time{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    .date-picker-wrapper .time1, .date-picker-wrapper .time2{
+      width: 100%;
+      text-align: left;
+      margin-top: .5rem;
+    }
+    .date-picker-wrapper .time1 >*, .date-picker-wrapper .time2 >*{
+      padding: 2px 0;
+    }
+    .date-picker-wrapper .hour, .date-picker-wrapper .minute{
+       width: 100%;
+      text-align: left;
+    } 
+    @media (max-width: 480px) {
+      .vic-daterange-p{
+        display: block;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class='vic-daterange-box'>
+  <p class='vic-daterange-p'><i class="fa fa-calendar-o"></i> 請輸入日期： </p>
+  <p class='vic-daterange-p'><span class='vic-daterange' id="idDateRange01">請選擇起始日期</span></p>
+</div>
+
+
+
+
+
+  <!-- jquery  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js""></script>
+  <script src=" https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js"> </script>
+  <!-- date picker -->
+  <script src="assets/js/jquery.daterangepicker.js"></script>
+  <script>
+      $( document ).ready(function() {
+          
+          //define a new language named "tw"
+         $.dateRangePickerLanguages['custom'] =
+        {
+          'selected': ' ',
+          'days': '天',
+          'apply': '確定',
+          'week-1': '一',
+          'week-2': '二',
+          'week-3': '三',
+          'week-4': '四',
+          'week-5': '五',
+          'week-6': '六',
+          'week-7': '日',
+          'month-name': ['一月', '二月', '三月', '四月', '五月', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          'shortcuts': 'Shortcuts',
+          'past': 'Past',
+          '7days': '7days',
+          '14days': '14days',
+          '30days': '30days',
+          'previous': 'Previous',
+          'prev-week': 'Week',
+          'prev-month': 'Month',
+          'prev-quarter': 'Quarter',
+          'prev-year': 'Year',
+          'time': '時間',
+          'Hour': '時',
+          'Minute': '分',
+          'less-than': 'Date range should longer than %d days',
+          'more-than': 'Date range should less than %d days',
+          'default-more': 'Please select a date range longer than %d days',
+          'default-less': 'Please select a date range less than %d days',
+          'default-range': '可選擇日期區間：%d ~ %d天',
+          'default-default': '請選擇起始日期'
+        };
+        var clarButtonHtml = "<input type='button' class='vic-daterange-btn vic-clear-btn' id='idDateRangeReset01' value='清除'>";
+        var defaultText = '預設輸入框文字';
+
+        $('#idDateRange01').dateRangePicker(
+                            {
+                                singleMonth: true, 
+                                showTopbar: true, 
+                                separator: ' → ',
+                                startDate: moment().startOf('day'),
+                                minDays: 1,
+                                maxDays: 30,
+                                language: 'custom',
+                                applyBtnClass: 'vic-daterange-btn',
+                                format: 'YYYY.DD.MM. HH:mm',
+                                time: {
+                                  enabled: true
+                                },
+                                defaultTime: moment().startOf('day').toDate(),
+                                defaultEndTime: moment().endOf('day').toDate(),
+                                //使用 span 模式需加這2段
+                                getValue: function () {
+                                  console.log(this.innerHTML);
+                                  return this.innerHTML;
+                                },
+                                setValue: function (s) {
+                                  this.innerHTML = s;
+                                }
+                            });
+          defaultText = $('#idDateRange01').text(); //取得輪入框原始文字，如「請輸入起始日期」etc
+          $('#idDateRange01').bind('datepicker-open', function () {
+            $('.apply-btn').after(clarButtonHtml); //在apply-btn 後加一個 clear btn
+            
+
+            // $('.apply-btn').on('classChange', function () {
+            //   // do stuff
+            //   console.log('changed!');
+            //   if($('.apply-btn').hasClass('disabled')){
+            //     $('.vic-clear-btn').addClass('disabled');
+            //   }else{
+            //     $('.vic-clear-btn').removeClass('disabled');
+            //   }
+
+            // });
+            $('.vic-clear-btn').click(function (e) {
+              e.stopPropagation();
+              if($('.apply-btn').hasClass('disabled')){
+                //nothing selected. close window.
+                $('#idDateRange01').data('dateRangePicker').close(); //關掉視窗
+              }else{
+                //things selected. clear selection.
+                $('#idDateRange01').data('dateRangePicker').clear(); //清除所選日期
+                $('#idDateRange01').text(defaultText);//輸入框清為預設文字
+              }
+              
+              
+            });
+            
+          });
+          
+          $('#idDateRange01').bind('datepicker-closed', function () {
+            $(".vic-clear-btn").remove(); //刪除 clear btn
+          });
+         
+      }); //document ready
+  </script>
+</body>
+</html>
